@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->id();
-            $table->string('member_name');
+            $table->bigIncrements('id');
+            $table->string('name');
             $table->string('email')->unique();
             $table->timestamps();
         });

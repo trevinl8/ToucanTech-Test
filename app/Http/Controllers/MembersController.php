@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Member;
+use App\Models\School;
 
 class MembersController extends Controller
 {
@@ -11,7 +13,8 @@ class MembersController extends Controller
      */
     public function index()
     {
-        //
+        $members = Member::all();
+        return view ('member.index')->withMembers($members);
     }
 
     /**
@@ -19,7 +22,8 @@ class MembersController extends Controller
      */
     public function create()
     {
-        //
+        $schools = School::all();
+        return view ('member.create')->withSchools($schools);
     }
 
     /**
@@ -27,7 +31,18 @@ class MembersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $member = new Member();
+        $member->name = $request->fullname;
+        $member->email = $request->email;
+        $member->save();
+
+        if ($request->school) 
+        {
+            $schools = School::find(explode(',', $request->school));
+            $member->school()->attach($schools);
+        }
+
+        return redirect()->route('member.index');
     }
 
     /**
